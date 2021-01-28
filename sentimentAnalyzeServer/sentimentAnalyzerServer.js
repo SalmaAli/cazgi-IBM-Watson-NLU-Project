@@ -87,7 +87,7 @@ app.get("/text/emotion", (req,res) => {
 
 app.get("/text/sentiment", (req,res) => {
     console.log(req.query.text)
-    let param = req.param.text;
+    let param = req.query.text;
     results = getNLUInstance().analyze({
         'text': param,
         'features': {
