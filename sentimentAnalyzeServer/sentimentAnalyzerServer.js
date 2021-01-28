@@ -29,20 +29,75 @@ app.get("/",(req,res)=>{
   });
 
 app.get("/url/emotion", (req,res) => {
-
-    return res.send({"happy":"90","sad":"10"});
+    results = getNLUInstance().analyze({
+        'url': req,
+        'features': {
+            'entities': {
+                'emotion': true,
+                'limit': 2
+            },
+            'keywords': {
+                'emotion': true,
+                'limit': 2
+            }
+    }})
+    .then(analysisResults => {console.log(JSON.stringify(analysisResults, null, 2));})
+    .catch(err => {console.log('error:', err);});
+    return res.send(results); //{"happy":"90","sad":"10"}
 });
 
 app.get("/url/sentiment", (req,res) => {
-    return res.send("url sentiment for "+req.query.url);
+    results = getNLUInstance().analyze({
+        'url': req,
+        'features': {
+            'entities': {
+                'sentiment': true,
+                'limit': 2
+            },
+            'keywords': {
+                'sentiment': true,
+                'limit': 2
+            }
+    }})
+    .then(analysisResults => {console.log(JSON.stringify(analysisResults, null, 2));})
+    .catch(err => {console.log('error:', err);});
+    return res.send(results); //"url sentiment for "+req.query.url
 });
 
 app.get("/text/emotion", (req,res) => {
-    return res.send({"happy":"10","sad":"90"});
+    results = getNLUInstance().analyze({
+        'text': req,
+        'features': {
+            'entities': {
+                'emotion': true,
+                'limit': 2
+            },
+            'keywords': {
+                'emotion': true,
+                'limit': 2
+            }
+    }})
+    .then(analysisResults => {console.log(JSON.stringify(analysisResults, null, 2));})
+    .catch(err => {console.log('error:', err);});
+    return res.send(results); //{"happy":"10","sad":"90"});
 });
 
 app.get("/text/sentiment", (req,res) => {
-    return res.send("text sentiment for "+req.query.text);
+    results = getNLUInstance().analyze({
+        'text': req,
+        'features': {
+            'entities': {
+                'sentiment': true,
+                'limit': 2
+            },
+            'keywords': {
+                'sentiment': true,
+                'limit': 2
+            }
+    }})
+    .then(analysisResults => {console.log(JSON.stringify(analysisResults, null, 2));})
+    .catch(err => {console.log('error:', err);});
+    return res.send(results); //"text sentiment for "+req.query.text
 });
 
 let server = app.listen(8080, () => {
