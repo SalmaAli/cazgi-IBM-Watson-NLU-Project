@@ -1,10 +1,10 @@
 const express = require('express');
-const dotenv = require('dotenv');
+const dotenv = require('dotenv').config();
 const app = new express();
 
 function getNLUInstance(){
-    let api_key = process.env.api_key;
-    let api_url = process.env.api_url;
+    let api_key = process.env.API_KEY;
+    let api_url = process.env.API_URL;
 
     const NaturalLanguageUnderstandingV1 = require('ibm-watson/natural-language-understanding/v1');
     const { IamAuthenticator } = require('ibm-watson/auth');
@@ -12,9 +12,9 @@ function getNLUInstance(){
     const naturalLanguageUnderstanding = new NaturalLanguageUnderstandingV1({
         version: '2020-08-01',
         authenticator: new IamAuthenticator({
-            apikey: '{apikey}',
+            apikey: api_key,
         }),
-        serviceUrl: '{url}',
+        serviceUrl: api_url,
     });
     return naturalLanguageUnderstanding;
 }
@@ -29,8 +29,9 @@ app.get("/",(req,res)=>{
   });
 
 app.get("/url/emotion", (req,res) => {
+    let param = req.query.url;
     results = getNLUInstance().analyze({
-        'url': req,
+        'url': param,
         'features': {
             'entities': {
                 'emotion': true,
@@ -47,8 +48,9 @@ app.get("/url/emotion", (req,res) => {
 });
 
 app.get("/url/sentiment", (req,res) => {
+    let param = req.query.url;
     results = getNLUInstance().analyze({
-        'url': req,
+        'url': param,
         'features': {
             'entities': {
                 'sentiment': true,
@@ -65,8 +67,9 @@ app.get("/url/sentiment", (req,res) => {
 });
 
 app.get("/text/emotion", (req,res) => {
+    let param = req.query.text;
     results = getNLUInstance().analyze({
-        'text': req,
+        'text': param,
         'features': {
             'entities': {
                 'emotion': true,
@@ -83,8 +86,10 @@ app.get("/text/emotion", (req,res) => {
 });
 
 app.get("/text/sentiment", (req,res) => {
+    console.log(req.query.text)
+    let param = req.param.text;
     results = getNLUInstance().analyze({
-        'text': req,
+        'text': param,
         'features': {
             'entities': {
                 'sentiment': true,
